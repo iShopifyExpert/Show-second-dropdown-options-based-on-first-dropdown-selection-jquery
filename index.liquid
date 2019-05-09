@@ -1,0 +1,99 @@
+<div class="all-region">
+    <div class="rows">
+      <label for="region">Select the Region</label>
+      <select id="groups" name="region">
+        <option value="North America">North America</option>
+        <option value="Europe">Europe</option>
+        <option value="Asia Pasific">Asia Pasific</option>
+      </select>
+    </div>
+    <div class="rows">
+      <label for="region">Select City</label>
+      <select id="sub_groups" name="country">
+        <option data-group="SHOW" value="0">Select Country</option>
+        <option data-group="North America" value="/en_US/products/{{product.type}}">United States</option>
+        <option data-group="North America" value="/en_CA/products/{{product.type}}">Canada</option>
+        <option data-group="North America" value="/es_MX/products/{{product.type}}">Mexico</option>
+        <option data-group="Europe" value="/en_AT/products/{{product.type}}">Austria</option>
+        <option data-group="Europe" value="/en_DK/products/{{product.type}}">Denmark</option>
+        <option data-group="Europe" value="/en_DE/products/{{product.type}}">Germany</option>
+        <option data-group="Europe" value="/en_NL/products/{{product.type}}">Netherlands</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Ireland</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">United Kingdom</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Portugal</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Switzerland</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Belgium</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Filand</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Italy</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Norway</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Romania</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Poland</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Russia</option>
+        <option data-group="Europe" value="/en_IE/products/{{product.type}}">Sweden</option>
+        <option data-group="Asia Pasific" value="/en_IE/products/{{product.type}}">Asutralia</option>
+        <option data-group="Asia Pasific" value="/en_IE/products/{{product.type}}">Singapore</option>
+        <option data-group="Asia Pasific" value="/en_IE/products/{{product.type}}">New Zealand</option>
+      </select>
+    </div>
+  
+   <div class="rows">
+     <div class="Button Button--primary disable" id="buyfrom"><a href="{{product.url}}" class="btn">Buy Now</a> </div>
+   </div>
+</div>
+<script>
+$(document).ready(function(){
+  $('#groups').on('change', function(){
+     var val = $(this).val();
+     var sub = $('#sub_groups');
+     $('option', sub).filter(function(){
+        if ($(this).attr('data-group') === val || $(this).attr('data-group') === 'SHOW') {
+          if ($(this).parent('span').length) {
+            $(this).unwrap();
+          }
+        } else {
+          if (!$(this).parent('span').length) {
+            $(this).wrap( "<span>" ).parent().hide();
+          }
+        }
+     });
+  });
+  $('#groups').trigger('change');
+  $('#sub_groups').on('change', function(){
+    $('#buyfrom').removeClass('disable');
+    $('#buyfrom a').attr('href', 'https://www.nuskin.com/content/nuskin'+$(this).val());
+    //if ($(this).attr('data-group') === 'SHOW') {
+    //  $('#buyfrom').removeClass('disable');
+    //} else {
+    //  $('#buyfrom').addClass('disable');
+    //}
+  });
+});
+</script>
+<style>
+.all-region {
+    margin: 20px 0px;
+}
+.all-region .rows {
+    margin: 20px 0;
+}
+.all-region .rows label {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 0px;
+    display: block;
+    text-transform: uppercase;
+}
+.all-region .rows select {
+    min-width: 260px;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    padding: 10px 28px 10px 14px;
+    border: 1px solid #cfcfcf;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+</style>
