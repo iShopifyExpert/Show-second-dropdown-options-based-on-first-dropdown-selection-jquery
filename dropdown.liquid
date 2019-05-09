@@ -1,0 +1,57 @@
+{%- assign region-options = product.description | split: '<!-- split -->' | last -%}
+{%- assign regionoptions = region-options | split: ',' -%}
+<div class="all-region">
+    <div class="rows">
+      <label for="region">Select the Region</label>{%- capture uniqueoption -%}{%- for coption in regionoptions -%}{%- assign option = coption | split: '|' -%}{{option[0]}}{%- if forloop.last -%}{%- else -%},{%- endif -%}{%- endfor -%}{%- endcapture -%}
+      {%- assign uniqueoptionn = uniqueoption | split: ',' | uniq | join: ' |' -%}{%- assign uniqueoptionn1 = uniqueoptionn | split: ' | ' | uniq | join: '|' | split: '|' -%}
+      <select id="groups" name="region">{%- for coption in uniqueoptionn1 -%}
+        <option value="{{coption | strip}}">{{coption | strip}}</option>{%- endfor -%}
+      </select>
+    </div>
+    <div class="rows">
+      <label for="region">Select City</label>
+      <select id="sub_groups" name="country">
+        <option data-group="SHOW" value="0">Select Country</option>{%- for coption in regionoptions -%}{%- assign option = coption | split: '|' -%}
+        <option data-group="{{option[0] | strip}}" value="{{option[2] | strip}}">{{option[1] | strip}}</option>{%- endfor -%}
+      </select>
+    </div>
+  
+   <div class="rows">
+     <div class="Button Button--primary disable" id="buyfrom"><a href="{{product.url}}" class="btn">Buy Now</a> </div>
+   </div>
+</div>
+<script>
+$(document).ready(function(){
+  $('#groups').on('change', function(){
+     var val = $(this).val();
+     var sub = $('#sub_groups');
+     $('option', sub).filter(function(){
+        if ($(this).attr('data-group') === val || $(this).attr('data-group') === 'SHOW') { if ($(this).parent('span').length) { $(this).unwrap(); } } else { if (!$(this).parent('span').length) { $(this).wrap( "<span>" ).parent().hide(); } }
+     });
+  });
+  $('#groups').trigger('change');
+  $('#sub_groups').on('change', function(){
+    $('#buyfrom').removeClass('disable'); $('#buyfrom a').attr('href', $(this).val());
+    //if ($(this).attr('data-group') === 'SHOW') { $('#buyfrom').removeClass('disable'); } else { $('#buyfrom').addClass('disable'); }
+  });
+});
+</script>
+
+{%- comment -%}
+
+Place this in the bottom of product descroption tab
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+<!-- split -->
+North America|United States|https://www.nuskin.com/content/nuskin/en_US/products/product.01111155.html,
+North America|Canada|https://www.nuskin.com/content/nuskin/en_CA/products/product.02111155.html,
+North America|Mexico|https://www.nuskin.com/content/nuskin/es_MX/products/product.08111155.html,
+Europe|Austria|https://www.nuskin.com/content/nuskin/en_AT/products/product.97111155.html,
+Europe|Denmark|https://www.nuskin.com/content/nuskin/en_DK/products/product.97111155.html,
+Europe|Germany|https://www.nuskin.com/content/nuskin/en_DE/products/product.97111155.html,
+Europe|Netherlands|https://www.nuskin.com/content/nuskin/en_NL/products/product.97111155.html,
+Asia Pasific|Asutralia|https://www.nuskin.com/content/nuskin/en_AT/products/product.97111155.html,
+Asia Pasific|Singapore|https://www.nuskin.com/content/nuskin/en_CA/products/product.02111155.html,
+Asia Pasific|New Zealand|https://www.nuskin.com/content/nuskin/en_AT/products/product.97111155.html
+
+{%- endcomment -%}
