@@ -1,0 +1,53 @@
+{% assign values = settings.all_schools | strip_newlines | replace: '  ',' ' | replace: ' |','|' | replace: '| ','|' | split: '|' %}
+
+<label class="fields_label" for="states">Select States</label>
+{%- capture states -%}{%- for coption in values -%}{%- assign option = coption | split: '_ ' -%}{{option[0]}}{%- if forloop.last -%}{%- else -%}~{%- endif -%}{%- endfor -%}{%- endcapture -%}
+{%- assign states1 = states | split: '~' -%}{%- assign states2 = states1 | uniq | join: '~' | split: '~' -%}
+<select id="states" name="states">{%- for state in states2 -%}
+    <option value="{{state | strip}}">{{state | strip}}</option>{%- endfor -%}
+</select>
+        
+{%- capture cities -%}{%- for coption in values -%}{%- assign option = coption | split: '_ ' -%}{{option[0]}} | {{option[1]}}{%- if forloop.last -%}{%- else -%}~{%- endif -%}{%- endfor -%}{%- endcapture -%}
+{%- assign cities1 = cities | split: '~' -%}{%- assign cities2 = cities1 | uniq | join: '~' | split: '~' -%}  
+<label class="fields_label" for="city">Select City</label>
+<select id="city" name="city">
+    <option data-group="SHOW" value="Select City">Select City</option>{%- for city in cities2 -%}{%- assign state = city | split: ' | ' | first -%}{%- assign citi = city | split: ' | ' | last -%}
+    <option data-group="{{state | strip}}" value="{{citi | strip}}">{{citi | strip}}</option>{%- endfor -%}
+</select>
+
+{%- capture schools -%}{%- for coption in values -%}{%- assign option = coption | split: '_ ' -%}{{option[1]}} | {{option[2]}}{%- if forloop.last -%}{%- else -%}~{%- endif -%}{%- endfor -%}{%- endcapture -%}
+{%- assign schools1 = schools | split: '~' -%}{%- assign schools2 = schools1 | uniq | join: '~' | split: '~' -%}
+<label class="fields_label" for="SelectSchool">Your School</label>
+<select class="login-input" name="customer[note][Your School]" id="SelectSchool" required>
+     <option data-group="SHOW" value="Choose Your School">Choose Your School</option>{%- for school in schools2 -%}{%- assign city = school | split: ' | ' | first -%}{%- assign sch = school | split: ' | ' | last -%}
+     <option data-group="{{city | strip}}" value="{{sch | strip}}">{{sch | strip}}</option>{%- endfor -%}
+</select>
+<input type="hidden" id="customer_tags" name="customer[tags]" value="Choose Your School"/>
+        
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#states').on('change', function(){
+      var val = $(this).val();
+      var sub = $('#city');
+      $('option', sub).filter(function(){
+        if ($(this).attr('data-group') === val || $(this).attr('data-group') === 'SHOW') { if ($(this).parent('span').length) { $(this).unwrap(); } } else { if (!$(this).parent('span').length) { $(this).wrap( "<span>" ).parent().hide(); } }
+      });
+      $("#SelectSchool").val('Choose Your School').trigger('change');
+    });
+    $('#city').on('change', function(){
+      var val1 = $(this).val();
+      var sub1 = $('#SelectSchool');
+      $('option', sub1).filter(function(){
+        if ($(this).attr('data-group') === val1 || $(this).attr('data-group') === 'SHOW') { if ($(this).parent('span').length) { $(this).unwrap(); } } else { if (!$(this).parent('span').length) { $(this).wrap( "<span>" ).parent().hide(); } }
+      });
+    });
+    $('#states').trigger('change');
+    $('#city').trigger('change');
+    $('#states, #city, #SelectSchool').change(function(){
+      var state = $('#states').children("option:selected").val().replace(', ', ' - ');
+      var city = $('#city').children("option:selected").val().replace(', ', ' - ');
+      var school = $('#SelectSchool').children("option:selected").val().replace(', ', ' - ');
+      $('#customer_tags').val('Your School: '+school+' | '+city+' | '+state);
+    });
+  });
+  </script>
