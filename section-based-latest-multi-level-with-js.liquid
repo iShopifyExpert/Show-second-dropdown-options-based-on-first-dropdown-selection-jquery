@@ -1,0 +1,56 @@
+{% schema %}
+{
+  "name": "Product Customizer",
+  "class": "product-template-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "product_breadcrumb",
+      "label": "Show collection link",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "firstdropdown",
+      "name": "First Dropdown",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Select an Option",
+          "info": "Option Label"
+        },
+        {
+          "type": "textarea",
+          "id": "options",
+          "label": "Options",
+          "default": "Option A, Option B, Option C",
+          "info": "Option Values coma seprated."
+        }
+      ]
+    },
+    {
+      "type": "additionaldropdown",
+      "name": "Additional Dropdown",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Select an Option",
+          "info": "Option Label"
+        },
+        {
+          "type": "textarea",
+          "id": "options",
+          "label": "Options",
+          "default": "Option A|Option Aa, Option B|Option Ba",
+          "info": "Option Values coma seprated with pole | for second option value."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
