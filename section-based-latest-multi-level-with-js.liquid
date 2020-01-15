@@ -1,6 +1,6 @@
 {% for block in section.blocks %}{% if block.type == 'dropdown' %}{% assign options_list = linklists[block.settings.options_linklist] %}{% if options_list != blank %}{% assign sub_option = false %}{% for option in options_list.links %}{% if option.type == 'product_link' %}{% if option.title contains '|' %}{% assign sub_option = true %}{% endif %}{% endif %}{% endfor %}
 <select class="product-selector" data-block-id="{{block.id}}" {% if sub_option == true %} style="display: none;"{% endif %} {{ block.shopify_attributes }}>
-  <option{% if sub_option == true %} data-group="All"{% endif %} value="0">{{options_list.title}}</option>
+  <option{% if sub_option == true %} data-group="All"{% endif %} data-image="{{product.featured_image | img_url: 'large'}}" value="0">{{options_list.title}}</option>
   {% for option in options_list.links %}{% if option.type == 'product_link' %}{% if option.title contains '|' %}{% assign option_value1 = option.title | replace: '  ',' ' | replace: ' |','|' | replace: '| ','|' | split: '|' | first %}{% assign option_value2 = option.title | replace: '  ',' ' | replace: ' |','|' | replace: '| ','|' | split: '|' | last %}{% else %}{% assign option_value2 = option.title %}{% endif %}
   <option{% if sub_option == true %} data-group="{{option_value1}}"{% endif %} data-id="{{option.object.selected_or_first_available_variant.id}}" data-price="{{option.object.price | money}}" data-image="{{option.object.featured_image | img_url: 'large'}}" value="{{option_value2}}">{{option_value2}}</option>
   {% endif %}{% endfor %}
@@ -9,7 +9,8 @@
 <script type="text/javascript">
 $(function(){
     $('.product-selector').on('change', function(){
-        var val = $(this).val();
+      var val = $(this).val();
+      $('.featured_image').attr({srcset: '', src: $(this).find('option:selected').data('image')});
       if($(this).next('.product-selector').length > 0) {
         var sub = $(this).next('.product-selector'),
             suball = $(this).nextAll('.product-selector');
