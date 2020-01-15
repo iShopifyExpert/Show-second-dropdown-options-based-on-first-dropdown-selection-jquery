@@ -1,0 +1,60 @@
+<select id="caliber">
+    <option value="0">Select Caliber</option>
+    <option value="6.5 Creedmoor">6.5 Creedmoor</option>
+    <option value="6mm GT">6mm GT</option>
+</select>
+    
+<select id="handside" style="display: none;">
+    <option data-group="All" value="0">Select HandSide</option>
+    <option data-group="6.5 Creedmoor" value="6.5x47 Lapua">6.5x47 Lapua</option>
+    <option data-group="6mm GT" value="6.5 SAUM">6.5 SAUM</option>
+    <option data-group="6.5 Creedmoor" value="7 SAUM">7 SAUM</option>
+</select>
+
+<select id="trigger" style="display: none;">
+    <option data-group="All" value="0">Select Trigger</option>
+    <option data-group="6.5x47 Lapua" value="1.4x27 Lapua">1.4x27 Lapua</option>
+    <option data-group="6.5 SAUM" value="1.5 JSAUM">6.5 SAUM</option>
+    <option data-group="6.5 SAUM" value="9 JSAUM">7 SAUM</option>
+</select>
+
+<script type="text/javascript">
+$(function(){
+    $('#caliber').on('change', function(){
+        var val = $(this).val();
+        var sub = $('#handside');
+        if (val === '0') {
+          $('#handside').slideUp();
+          $('#trigger').slideUp();
+        } else {
+          $('option', sub).filter(function(){
+            if ($(this).attr('data-group') === val || $(this).attr('data-group') === 'All') {
+              if ($(this).parent('span').length) { $(this).unwrap(); }
+            } else {
+              if (!$(this).parent('span').length) { $(this).wrap( "<span>" ).parent().hide(); }
+            }
+          });
+          $('#handside').slideDown();
+        }
+    });
+    $('#caliber').trigger('change');
+  
+    $('#handside').on('change', function(){
+        var val = $(this).val();
+        var sub = $('#trigger');
+        if (val === '0') {
+          $('#trigger').slideUp();
+        } else {
+          $('option', sub).filter(function(){
+            if ($(this).attr('data-group') === val || $(this).attr('data-group') === 'All') {
+              if ($(this).parent('span').length) { $(this).unwrap(); }
+            } else {
+              if (!$(this).parent('span').length) { $(this).wrap( "<span>" ).parent().hide(); }
+            }
+          });
+          $('#trigger').slideDown();
+        }
+    });
+    $('#handside').trigger('change');
+});
+</script>
