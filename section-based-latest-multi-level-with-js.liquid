@@ -1,6 +1,6 @@
 {% for block in section.blocks %}{% if block.type == 'dropdown' %}{% assign options_list = linklists[block.settings.options_linklist] %}{% if options_list != blank %}{% assign sub_option = false %}{% for option in options_list.links %}{% if option.type == 'product_link' %}{% if option.title contains '|' %}{% assign sub_option = true %}{% endif %}{% endif %}{% endfor %}
 <select class="product-selector" name="id[]" data-block-id="{{block.id}}" {% if sub_option == true %} style="display: none;"{% endif %} {{ block.shopify_attributes }}>
-  <option{% if sub_option == true %} data-group="All"{% endif %} data-price="0" data-image="{{product.featured_image | img_url: 'large'}}" data-value="0" value="0">{{options_list.title}}</option>
+  <option{% if sub_option == true %} data-group="All"{% endif %} data-price="0" data-image="{{product.featured_image | img_url: 'large'}}" data-value="zero" value="0">{{options_list.title}}</option>
   {% for option in options_list.links %}{% if option.type == 'product_link' %}{% if option.title contains '|' %}{% assign option_value1 = option.title | replace: '  ',' ' | replace: ' |','|' | replace: '| ','|' | split: '|' | first %}{% assign option_value2 = option.title | replace: '  ',' ' | replace: ' |','|' | replace: '| ','|' | split: '|' | last %}{% else %}{% assign option_value2 = option.title %}{% endif %}
   <option{% if sub_option == true %} data-group="{{option_value1}}"{% endif %} data-value="{{option_value2}}" data-price="{{option.object.price | money_without_currency | remove: ','}}" data-image="{{option.object.featured_image | img_url: 'large'}}" value="{{option.object.selected_or_first_available_variant.id}}"{% if option.object.available %}{% else %} disabled{% endif %}>{{option_value2}} - {{option.object.price | money}}{% if option.object.available %}{% else %} - Soldout{% endif %}</option>
   {% endif %}{% endfor %}
@@ -15,10 +15,10 @@ $(function(){
       $('.product-selector').each(function() { total += $(this).find('option:selected').data('price') * 100; });
       $('.featured_image').attr({srcset: '', src: $(this).find('option:selected').data('image')});
       $('.current_price').text(Shopify.formatMoney(total, $('body').data('money-format')));
-      if($(this).next('.product-selector').length) {
+      if($(this).next('.product-selector').length > 0) {
         var sub = $(this).next('.product-selector'),
             suball = $(this).nextAll('.product-selector');
-        if (val === '0') {
+        if (val === 'zero') {
           suball.slideUp();
         } else {
           $('option', sub).filter(function(){
